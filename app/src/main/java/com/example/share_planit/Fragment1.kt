@@ -5,6 +5,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import android.widget.TextView
+import com.example.share_planit.databinding.Fragment1Binding
+import com.kizitonwose.calendarview.model.CalendarDay
+import com.kizitonwose.calendarview.ui.DayBinder
+import com.kizitonwose.calendarview.ui.ViewContainer
+import java.time.YearMonth
+import java.time.temporal.WeekFields
+import java.util.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -21,6 +30,8 @@ class Fragment1 : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -34,6 +45,32 @@ class Fragment1 : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+        val binding = Fragment1Binding.inflate(layoutInflater)
+
+        class DayViewContainer(view: View) : ViewContainer(view) {
+            val textView = view.findViewById<TextView>(R.id.calendarDayText)
+
+        }
+
+
+        binding.calendarView.dayBinder = object : DayBinder<DayViewContainer> {
+            // 새 컨테이너가 필요할 때만 호출됩니다.
+            override fun create(view: View) = DayViewContainer(view)
+
+            // 컨테이너를 재사용해야 할 때마다 호출됩니다.
+            override fun bind(container: DayViewContainer, day: CalendarDay) {
+                container.textView.text = day.date.dayOfMonth.toString()
+            }
+        }
+
+        val currentMonth = YearMonth.now()
+        val firstMonth = currentMonth.minusMonths(10)
+        val lastMonth = currentMonth.plusMonths(10)
+        val firstDayOfWeek = WeekFields.of(Locale.getDefault()).firstDayOfWeek
+        binding.calendarView.setup(firstMonth, lastMonth, firstDayOfWeek)
+        binding.calendarView.scrollToMonth(currentMonth)
+
+
         return inflater.inflate(R.layout.fragment_1, container, false)
     }
 

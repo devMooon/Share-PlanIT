@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //setContentView(R.layout.activity_main)
-        val binding = ActivityMainBinding.inflate(layoutInflater)
+        val binding = com.example.share_planit.databinding.ActivityMainBinding.inflate(layoutInflater)
         setSupportActionBar(binding.toolbar)
         setContentView(binding.root)
 
